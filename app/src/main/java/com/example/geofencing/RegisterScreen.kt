@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.geofencing.databinding.ActivityRegisterScreenBinding
+import com.example.geofencing.model.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -76,7 +77,13 @@ class RegisterScreen : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "User created", Toast.LENGTH_LONG).show()
+                        database.child("Users").child(auth.uid!!).setValue(User(auth.uid!!, email))
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(this, "User created", Toast.LENGTH_LONG).show()
+
+                                }
+                            }
                         navigateToUserWorkScreen()
                     } else {
                         val errorMessage = task.exception?.message

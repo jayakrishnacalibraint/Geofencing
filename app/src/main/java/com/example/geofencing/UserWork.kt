@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 
 class UserWork : AppCompatActivity() {
     private lateinit var userWorkBinding: ActivityUserWorkBinding
@@ -42,7 +43,7 @@ class UserWork : AppCompatActivity() {
         userWorkBinding = ActivityUserWorkBinding.inflate(layoutInflater)
         setContentView(userWorkBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        appointmentRecyclerView = findViewById(R.id.appointmentRecycler)
+        appointmentRecyclerView = userWorkBinding.appointmentRecycler
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Appointments"
@@ -59,7 +60,7 @@ class UserWork : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        database = FirebaseDatabase.getInstance().reference.child("appointments")
+        database = Firebase.database.reference.child("appointments")
 
 
     }

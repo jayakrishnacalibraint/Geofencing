@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginScreen"
-    android:background="@drawable/login_bg">
+    tools:context=".LoginScreen">
 
-    <include
-        layout="@layout/toolbar" />
+    <include layout="@layout/toolbar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTextInputLayout"
@@ -28,8 +26,8 @@
             android:id="@+id/emailEdx"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:hint="Email"
+            android:inputType="textEmailAddress"
             android:padding="15dp"
 
             />
@@ -42,15 +40,15 @@
         android:id="@+id/passwordTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintEnd_toEndOf="@id/emailTextInputLayout"
         app:layout_constraintStart_toStartOf="@id/emailTextInputLayout"
         app:layout_constraintTop_toBottomOf="@id/emailTextInputLayout"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-       app:startIconDrawable="@drawable/password"
-        >
+        app:startIconDrawable="@drawable/password">
+
         <com.google.android.material.textfield.TextInputEditText
 
             android:id="@+id/pwdEdx"
@@ -60,8 +58,7 @@
             android:hint="Password"
             android:imeOptions="actionNext"
             android:inputType="textPassword"
-            android:padding="15dp"
-            />
+            android:padding="15dp" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -83,8 +80,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="New User ?"
         android:layout_marginEnd="8dp"
+        android:text="New User ?"
         app:layout_constraintEnd_toStartOf="@id/signupText"
         app:layout_constraintTop_toBottomOf="@id/loginBtn" />
 
@@ -93,13 +90,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:textColorLink="#2380CA"
+        android:layout_marginEnd="16dp"
         android:text="Signup"
         android:textColor="#2380CA"
-        android:layout_marginEnd="16dp"
+        android:textColorLink="#2380CA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginBtn" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

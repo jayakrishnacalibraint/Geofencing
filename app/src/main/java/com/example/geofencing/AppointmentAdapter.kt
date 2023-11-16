@@ -1,28 +1,20 @@
 package com.example.geofencing
 
 import android.content.Context
-import android.location.Address
-import android.location.Geocoder
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geofencing.model.Appointment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.io.IOException
-import java.util.Locale
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 class AppointmentAdapter(
     private val context: Context,
@@ -58,7 +50,6 @@ class AppointmentAdapter(
         }
 
 
-
     }
 
 
@@ -88,6 +79,8 @@ class AppointmentAdapter(
         val database = Firebase.database.reference
 
         statusTextView?.text = "Status :${item.status}"
+        bottomSheetDialog.show()
+
         val appointmentLocationLatLng =
             locationHelper.getLocationFromAddress(context, item.location)
         if (!locationHelper.isWithinGeofence(
@@ -99,7 +92,7 @@ class AppointmentAdapter(
 
             changeStatusBtn?.setOnClickListener {
                 changeStatusBtn?.visibility = View.INVISIBLE
-                
+
                 val appointmentId = "a${position + 1}"
                 database.child("appointments").child(auth.uid.toString()).child(appointmentId)
                     .child("status").setValue("completed").addOnCompleteListener {
@@ -116,7 +109,24 @@ class AppointmentAdapter(
 
         }
 
-        bottomSheetDialog.show()
+
+        appointmentLocationTextView?.setOnClickListener {
+            val latLng = locationHelper.getLocationFromAddress(context, item.location)
+            val latitude = latLng?.latitude
+            val longitude = latLng?.longitude
+            val label = item.location
+            val uri = "geo:$latitude,$longitude?q=$latitude,$longitude($label)"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+            intent.setPackage("com.google.android.apps.maps")
+
+            if (intent.resolveActivity(context.packageManager) != null) {
+                context.startActivity(intent)
+            } else {
+                // Handle the case where Maps app is not installed
+                // You can redirect the user to the Google Play Store to download the app, for example.
+                Toast.makeText(context, "Download maps from Playstore", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
     }
