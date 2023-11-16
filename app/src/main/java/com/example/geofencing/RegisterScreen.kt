@@ -65,7 +65,6 @@ class RegisterScreen : AppCompatActivity() {
     private fun navigateToLoginScreen() {
         val intent = Intent(this, LoginScreen::class.java)
         startActivity(intent)
-        finish()
     }
 
     private fun createUserWithEmailAndPassword() {

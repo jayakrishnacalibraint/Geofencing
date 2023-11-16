@@ -10,10 +10,8 @@ import androidx.appcompat.widget.Toolbar
 import com.example.geofencing.databinding.ActivityLoginScreenBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -24,6 +22,7 @@ class LoginScreen : AppCompatActivity() {
 
     private lateinit var loginButton: Button
     private lateinit var signupTextView: TextView
+    private lateinit var adminLoginText: TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var email: String
@@ -41,7 +40,10 @@ class LoginScreen : AppCompatActivity() {
 
         loginButton.setOnClickListener { signinWithEmailAddress() }
         signupTextView.setOnClickListener { navigateToRegisterScreen() }
+        adminLoginText.setOnClickListener { navigateToAdminLoginScreen() }
     }
+
+
 
 
     private fun initializeFirebase() {
@@ -54,19 +56,26 @@ class LoginScreen : AppCompatActivity() {
         pwdText = loginScreenBinding.pwdEdx
         loginButton = loginScreenBinding.loginBtn
         signupTextView = loginScreenBinding.signupText
+        adminLoginText=loginScreenBinding.adminLoginTextView
     }
 
     private fun navigateToUserWorkScreen() {
         val intent = Intent(this, UserWork::class.java)
         startActivity(intent)
-        finish()
+        finishAffinity()
     }
 
     private fun navigateToRegisterScreen() {
         val intent = Intent(this, RegisterScreen::class.java)
         startActivity(intent)
-        finish()
     }
+
+
+    private fun navigateToAdminLoginScreen() {
+        val intent = Intent(this, AdminLoginScreen::class.java)
+        startActivity(intent)
+    }
+
 
     private fun signinWithEmailAddress() {
         email = emailText.text.toString()
