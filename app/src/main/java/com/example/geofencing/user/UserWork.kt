@@ -1,19 +1,21 @@
-package com.example.geofencing
+package com.example.geofencing.user
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geofencing.R
+import com.example.geofencing.admin.UsersListScreen
 import com.example.geofencing.databinding.ActivityUserWorkBinding
 import com.example.geofencing.model.Appointment
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -25,9 +27,9 @@ import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.database.getValue
 
 class UserWork : AppCompatActivity() {
     private lateinit var userWorkBinding: ActivityUserWorkBinding
@@ -42,28 +44,43 @@ class UserWork : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         userWorkBinding = ActivityUserWorkBinding.inflate(layoutInflater)
         setContentView(userWorkBinding.root)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         appointmentRecyclerView = userWorkBinding.appointmentRecycler
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Appointments"
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        // Check and request location permissions if not granted
-        if (isLocationPermissionGranted()) {
-            fetchLocation()
-        } else {
-            requestLocationPermission()
-        }
-
         auth = Firebase.auth
 
         database = Firebase.database.reference.child("appointments")
 
 
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            if (isLocationPermissionGranted()) {
+                fetchLocation()
+
+            } else {
+                requestLocationPermission()
+            }
+        }
+    }
+
+    private fun navigateToUserListScreen() {
+        val intent = Intent(this, UsersListScreen::class.java)
+        startActivity(intent)
+        finishAffinity()
+    }
+
 
     private fun isLocationPermissionGranted(): Boolean {
         return (ContextCompat.checkSelfPermission(
@@ -109,16 +126,11 @@ class UserWork : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Clear the existing data in the list
                 appointments.clear()
-
                 // Iterate through the dataSnapshot to retrieve the updated data
                 for (appointmentSnapshot in dataSnapshot.children) {
-                    val name = appointmentSnapshot.child("name").getValue(String::class.java)
-                    val location =
-                        appointmentSnapshot.child("location").getValue(String::class.java)
-                    val status = appointmentSnapshot.child("status").getValue(String::class.java)
-
-                    if (name != null && location != null && status != null) {
-                        appointments.add(Appointment(name, location, status))
+                    val appointment = appointmentSnapshot.getValue<Appointment>()
+                    if (appointment != null) {
+                        appointments.add(appointment)
                     }
                 }
 
@@ -126,16 +138,12 @@ class UserWork : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("jay", "error received: $databaseError")
 
             }
         })
     }
 
-
-    override fun onStart() {
-        super.onStart()
-        if (auth.currentUser == null) navigateToLoginScreen()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.sign_out, menu)
@@ -163,5 +171,12 @@ class UserWork : AppCompatActivity() {
         finish()
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        when {
+            currentUser == null -> navigateToLoginScreen()
+            currentUser.email == "krishna@admin.com" -> navigateToUserListScreen()
+        }
+    }
 }

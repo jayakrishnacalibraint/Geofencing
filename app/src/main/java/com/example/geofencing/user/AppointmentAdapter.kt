@@ -1,4 +1,4 @@
-package com.example.geofencing
+package com.example.geofencing.user
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geofencing.LocationHelper
+import com.example.geofencing.R
 import com.example.geofencing.model.Appointment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetDialog

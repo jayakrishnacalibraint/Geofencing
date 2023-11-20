@@ -1,4 +1,4 @@
-package com.example.geofencing
+package com.example.geofencing.admin
 
 import android.content.Context
 import android.view.LayoutInflater

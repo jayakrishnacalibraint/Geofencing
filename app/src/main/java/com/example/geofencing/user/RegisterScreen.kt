@@ -1,13 +1,15 @@
-package com.example.geofencing
+package com.example.geofencing.user
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.example.geofencing.databinding.ActivityLoginScreenBinding
+import com.example.geofencing.R
+import com.example.geofencing.databinding.ActivityRegisterScreenBinding
+import com.example.geofencing.model.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,35 +17,31 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class LoginScreen : AppCompatActivity() {
-    private lateinit var loginScreenBinding: ActivityLoginScreenBinding
+class RegisterScreen : AppCompatActivity() {
+    private lateinit var registerScreenBinding: ActivityRegisterScreenBinding
     private lateinit var emailText: TextInputEditText
     private lateinit var pwdText: TextInputEditText
-
-    private lateinit var loginButton: Button
-    private lateinit var signupTextView: TextView
-    private lateinit var adminLoginText: TextView
+    private lateinit var loginTextView: TextView
+    private lateinit var signUpButton: Button
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var email: String
     private lateinit var password: String
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loginScreenBinding = ActivityLoginScreenBinding.inflate(layoutInflater)
-        setContentView(loginScreenBinding.root)
+        registerScreenBinding = ActivityRegisterScreenBinding.inflate(layoutInflater)
+        setContentView(registerScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "     Login Screen"
+        supportActionBar?.title = "     Register Screen"
         initializeViews()
         initializeFirebase()
+        signUpButton.setOnClickListener { createUserWithEmailAndPassword() }
+        loginTextView.setOnClickListener { navigateToLoginScreen() }
 
-        loginButton.setOnClickListener { signinWithEmailAddress() }
-        signupTextView.setOnClickListener { navigateToRegisterScreen() }
-        adminLoginText.setOnClickListener { navigateToAdminLoginScreen() }
     }
-
-
 
 
     private fun initializeFirebase() {
@@ -52,39 +50,39 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        emailText = loginScreenBinding.emailEdx
-        pwdText = loginScreenBinding.pwdEdx
-        loginButton = loginScreenBinding.loginBtn
-        signupTextView = loginScreenBinding.signupText
-        adminLoginText=loginScreenBinding.adminLoginTextView
+        emailText = registerScreenBinding.emailEdx
+        pwdText = registerScreenBinding.pwdEdx
+        signUpButton = registerScreenBinding.signupBtn
+        loginTextView = registerScreenBinding.loginText
     }
 
     private fun navigateToUserWorkScreen() {
         val intent = Intent(this, UserWork::class.java)
         startActivity(intent)
-        finishAffinity()
+        finish()
     }
 
-    private fun navigateToRegisterScreen() {
-        val intent = Intent(this, RegisterScreen::class.java)
+    private fun navigateToLoginScreen() {
+        val intent = Intent(this, LoginScreen::class.java)
         startActivity(intent)
     }
 
-
-    private fun navigateToAdminLoginScreen() {
-        val intent = Intent(this, AdminLoginScreen::class.java)
-        startActivity(intent)
-    }
-
-
-    private fun signinWithEmailAddress() {
+    private fun createUserWithEmailAndPassword() {
         email = emailText.text.toString()
         password = pwdText.text.toString()
+
+
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            auth.signInWithEmailAndPassword(email, password)
+            auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "login successful", Toast.LENGTH_LONG).show()
+                        database.child("Users").child(auth.uid!!).setValue(User(auth.uid!!, email))
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    Toast.makeText(this, "User created", Toast.LENGTH_LONG).show()
+
+                                }
+                            }
                         navigateToUserWorkScreen()
                     } else {
                         val errorMessage = task.exception?.message

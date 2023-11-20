@@ -1,4 +1,4 @@
-package com.example.geofencing
+package com.example.geofencing.admin
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,8 @@ import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.geofencing.user.LoginScreen
+import com.example.geofencing.R
 import com.example.geofencing.databinding.ActivityUsersListScreenBinding
 import com.example.geofencing.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -30,7 +32,7 @@ class UsersListScreen : AppCompatActivity() {
         setContentView(usersListScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Appointments"
+        supportActionBar?.title = "Users"
 
         auth = Firebase.auth
         database = Firebase.database.reference
@@ -50,10 +52,8 @@ class UsersListScreen : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 usersList.clear()
                 for (userSnapshot in snapshot.children) {
-                    val user: User? =userSnapshot.getValue(User::class.java)
-                    val email = userSnapshot.child("email").getValue(String::class.java)
-                    val id = userSnapshot.child("id").getValue(String::class.java)
-                    if (user!=null) {
+                    val user: User? = userSnapshot.getValue(User::class.java)
+                    if (user != null) {
                         usersList.add(user)
                     }
                 }

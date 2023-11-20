@@ -1,4 +1,4 @@
-package com.example.geofencing
+package com.example.geofencing.admin
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.example.geofencing.user.LoginScreen
+import com.example.geofencing.R
 import com.example.geofencing.databinding.ActivityAdminLoginScreenBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -33,7 +35,7 @@ class AdminLoginScreen : AppCompatActivity() {
         setContentView(adminLoginScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "     Login Screen"
+        supportActionBar?.title = "Login Screen"
         initializeViews()
         initializeFirebase()
 
@@ -41,12 +43,7 @@ class AdminLoginScreen : AppCompatActivity() {
         userLoginTextView.setOnClickListener { navigateToUserLoginScreen() }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if(auth.currentUser!=null && auth.uid=="xfm31CvBLIdvnsuuOjgQ0DfmVH02"){
-            navigateToUserListScreen()
-        }
-    }
+
 
 
     private fun initializeFirebase() {
@@ -70,6 +67,7 @@ class AdminLoginScreen : AppCompatActivity() {
     private fun navigateToUserLoginScreen() {
         val intent = Intent(this, LoginScreen::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun signinWithEmailAddress() {
