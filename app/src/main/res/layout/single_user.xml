@@ -18,7 +18,7 @@
 
     >
 <TextView
-    android:text="Krishna1397"
+    android:text="@string/krishna1397"
     android:id="@+id/userTextView"
     android:layout_width="0dp"
     android:layout_height="wrap_content"

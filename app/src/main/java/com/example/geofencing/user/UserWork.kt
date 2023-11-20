@@ -49,7 +49,7 @@ class UserWork : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Appointments"
+        supportActionBar?.title = getString(R.string.appointments)
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -176,7 +176,7 @@ class UserWork : AppCompatActivity() {
         val currentUser = auth.currentUser
         when {
             currentUser == null -> navigateToLoginScreen()
-            currentUser.email == "krishna@admin.com" -> navigateToUserListScreen()
+            currentUser.email == getString(R.string.admin_email) -> navigateToUserListScreen()
         }
     }
 }

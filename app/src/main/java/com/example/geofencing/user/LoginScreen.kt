@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.geofencing.R
 import com.example.geofencing.admin.AdminLoginScreen
+import com.example.geofencing.admin.UsersListScreen
 import com.example.geofencing.databinding.ActivityLoginScreenBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +37,7 @@ class LoginScreen : AppCompatActivity() {
         setContentView(loginScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "  Login Screen"
+        supportActionBar?.title = getString(R.string.login_screen)
         initializeViews()
         initializeFirebase()
 
@@ -66,7 +67,7 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun navigateToUserListScreen() {
-        val intent = Intent(this, UserWork::class.java)
+        val intent = Intent(this, UsersListScreen::class.java)
         startActivity(intent)
         finish()
     }
@@ -103,9 +104,9 @@ class LoginScreen : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
-        if (currentUser != null && currentUser.email == "krishna@admin.com") {
+        if (currentUser != null && currentUser.email == getString(R.string.admin_email)) {
             navigateToUserListScreen()
-        } else if (currentUser != null&& currentUser.email != "krishna@admin.com") {
+        } else if (currentUser != null && currentUser.email != getString(R.string.admin_email)) {
             navigateToUserWorkScreen()
         }
 

@@ -11,6 +11,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+@Suppress("DEPRECATION")
 class LocationHelper {
     fun getPlaceNameFromCoordinates(context: Context, latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())
@@ -62,7 +63,8 @@ class LocationHelper {
         return distance <= radius
     }
 
-    fun calculateDistance(userLocation: LatLng, appointmentLocation: LatLng): Double {
+
+    private fun calculateDistance(userLocation: LatLng, appointmentLocation: LatLng): Double {
         val earthRadius = 6371 // Earth's radius in kilometers
         val dLat = Math.toRadians(appointmentLocation.latitude - userLocation.latitude)
         val dLng = Math.toRadians(appointmentLocation.longitude - userLocation.longitude)

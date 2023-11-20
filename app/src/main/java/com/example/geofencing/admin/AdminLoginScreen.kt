@@ -35,15 +35,13 @@ class AdminLoginScreen : AppCompatActivity() {
         setContentView(adminLoginScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Login Screen"
+        supportActionBar?.title = getString(R.string.admin_login_screen)
         initializeViews()
         initializeFirebase()
 
         loginButton.setOnClickListener { signinWithEmailAddress() }
         userLoginTextView.setOnClickListener { navigateToUserLoginScreen() }
     }
-
-
 
 
     private fun initializeFirebase() {
@@ -67,14 +65,13 @@ class AdminLoginScreen : AppCompatActivity() {
     private fun navigateToUserLoginScreen() {
         val intent = Intent(this, LoginScreen::class.java)
         startActivity(intent)
-        finish()
     }
 
     private fun signinWithEmailAddress() {
         email = emailText.text.toString()
         password = pwdText.text.toString()
-        if (email.isNotEmpty()&& password.isNotEmpty()) {
-            if(email=="krishna@admin.com"){
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            if (email == getString(R.string.admin_email)) {
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
@@ -85,13 +82,10 @@ class AdminLoginScreen : AppCompatActivity() {
                             Toast.makeText(this, "$errorMessage", Toast.LENGTH_LONG).show()
                         }
                     }
-            }
-            else if(!email.endsWith("@admin.com")){
+            } else if (!email.endsWith("@admin.com")) {
                 emailText.error = "mail should end with @admin.com"
-            }
-
-            else{
-                Toast.makeText(this,"Only Admin can login ", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Only Admin can login ", Toast.LENGTH_SHORT).show()
             }
 
         }

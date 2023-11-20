@@ -32,7 +32,7 @@ class UsersListScreen : AppCompatActivity() {
         setContentView(usersListScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Users"
+        supportActionBar?.title = getString(R.string.users)
 
         auth = Firebase.auth
         database = Firebase.database.reference

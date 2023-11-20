@@ -35,7 +35,7 @@ class RegisterScreen : AppCompatActivity() {
         setContentView(registerScreenBinding.root)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "     Register Screen"
+        supportActionBar?.title = getString(R.string.register_screen)
         initializeViews()
         initializeFirebase()
         signUpButton.setOnClickListener { createUserWithEmailAndPassword() }
@@ -80,7 +80,6 @@ class RegisterScreen : AppCompatActivity() {
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     Toast.makeText(this, "User created", Toast.LENGTH_LONG).show()
-
                                 }
                             }
                         navigateToUserWorkScreen()
